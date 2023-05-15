@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>{{course_obj.name}}</title>{% endblock title %}
+
+
+{% block body %}
+
+<br>
+
+{% if lesson_obj %}
+<div class="container">
+    <p class="text-center" style="font-weight:bold;font-size: larger;text-decoration: underline;">{{course_obj.name}}
+    </p>
+    <br>
+    <div class="row">
+        <div class="col-md-4" style="border-right: 1px solid lightgray;">
+            {% for lession in lesson_obj %}
+            <button class="btn btn-light mb-2" data-title="{{lession.name}}" data-src="{{lession.video.url}}"
+                data-description="{{lession.description}}" style="width: 100%;white-space: break-spaces;">{{lession.name}}</button>
+            {% endfor %}
+            {% if quiz_obj %}
+            <button class="btn btn-light mb-3" style="width: 100%;">Quiz</button>
+            {% endif %}
+        </div>
+
+        <div class="col-md-8 text-center">
+            <div id="lession-div">
+                <div style="text-align:start;margin-left:50px;">
+                    <p id="lessionName" style="margin-bottom:5px;font-weight: bold;">{{lesson_obj.0.name}}</p>
+                    <pre style="white-space: break-spaces;" id="lessionDesc">{{lesson_obj.0.description}}</pre>
+                </div>
+                <video width="600" height="400" controls autoplay>
+                    <source src="{{lesson_obj.0.video.url}}" type="video/mp4">
+                </video>
+            </div>
+            <div id="quiz-div">
+                <p
+                    style="margin-bottom:5px;font-weight: bold;font-size:large;letter-spacing: 10px;text-decoration: underline;">
+                    Quiz</p>
+                <br>
+                {% if result %}
+                <p style="text-align: right;font-size: large;font-weight: bold;color: green;">
+                    SCORE : {{result}}
+                </p>
+                {% endif %}
+                <div style="text-align: left;padding-left:20px;">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="course_id" value="{{course_obj.id}}">
+                        {% for quiz in quiz_obj %}
+                        <p>Q.{{forloop.counter}}. {{quiz.question}}</p>
+                        {% if result %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                {% if quiz.option1 in selected_options and quiz.option1 != quiz.answer %}
+                                    <i class="fa fa-times-circle" style="color: red;" aria-hidden="true"></i>
+                                    <label style="color: red;">{{quiz.option1}}</label>
+                                {% else %}
+                                    {% if quiz.option1 == quiz.answer %}
+                                        <i class="fa fa-check-circle" style="color:green" aria-hidden="true"></i>
+                                        <label style="color:green">{{quiz.option1}}</label>
+                                    {% else %}
+                                        <label style="color: grey;">{{quiz.option1}}</label>
+                                    {% endif %}
+                                {% endif %}
+                             </div>
+
+                             <div class="col-md-6 mb-3">
+                                {% if quiz.option2 in selected_options and quiz.option2 != quiz.answer %}
+                                    <i class="fa fa-times-circle" style="color: red;" aria-hidden="true"></i>
+                                    <label style="color: red;">{{quiz.option2}}</label>
+                                {% else %}
+                                    {% if quiz.option2 == quiz.answer %}
+                                        <i class="fa fa-check-circle" style="color:green" aria-hidden="true"></i>
+                                        <label style="color: green;">{{quiz.option2}}</label>
+                                    {% else %}
+                                        <label style="color: grey;">{{quiz.option2}}</label>
+                                    {% endif %}
+                                {% endif %}
+                             </div>
+
+                             <div class="col-md-6 mb-3">
+                                {% if quiz.option3 in selected_options and quiz.option3 != quiz.answer %}
+                                    <i class="fa fa-times-circle" style="color: red;" aria-hidden="true"></i>
+                                    <label style="color: red;">{{quiz.option3}}</label>
+                                {% else %}
+                                    {% if quiz.option3 == quiz.answer %}
+                                        <i class="fa fa-check-circle" style="color:green" aria-hidden="true"></i>
+                                        <label style="color: green;">{{quiz.option3}}</label>
+                                    {% else %}
+                                        <label style="color: grey;">{{quiz.option3}}</label>
+                                    {% endif %}
+                                {% endif %}
+                             </div>
+
+                             <div class="col-md-6 mb-3">
+                                {% if quiz.option4 in selected_options and quiz.option4 != quiz.answer %}
+                                    <i class="fa fa-times-circle" style="color: red;" aria-hidden="true"></i>
+                                    <label style="color: red;">{{quiz.option4}}</label>
+                                {% else %}
+                                    {% if quiz.option4 == quiz.answer %}
+                                        <i class="fa fa-check-circle" style="color:green" aria-hidden="true"></i>
+                                        <label style="color: green;">{{quiz.option4}}</label>
+                                    {% else %}
+                                        <label style="color: grey;">{{quiz.option4}}</label>
+                                    {% endif %}
+                                {% endif %}
+                             </div>
+                        </div>
+                            {% else %}
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="option{{quiz.id}}1"
+                                            name="q{{quiz.id}}" value="{{quiz.option1}}" required>
+                                        <label class="custom-control-label"
+                                            for="option{{quiz.id}}1">{{quiz.option1}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="option{{quiz.id}}2"
+                                            name="q{{quiz.id}}" value="{{quiz.option2}}" required>
+                                        <label class="custom-control-label"
+                                            for="option{{quiz.id}}2">{{quiz.option2}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="option{{quiz.id}}3"
+                                            name="q{{quiz.id}}" value="{{quiz.option3}}" required>
+                                        <label class="custom-control-label"
+                                            for="option{{quiz.id}}3">{{quiz.option3}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="option{{quiz.id}}4"
+                                            name="q{{quiz.id}}" value="{{quiz.option4}}" required>
+                                        <label class="custom-control-label"
+                                            for="option{{quiz.id}}4">{{quiz.option4}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <br>
+                            {% endfor %}
+                            {% if not result %}
+                            <button style="width: 150px;display: block;margin-left: auto;margin-right: auto;"
+                                type="submit" class="btn btn-outline-success">Submit</button>
+                            {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<h4 style="text-align:center;color:orange">Not any lesson added on the course</h4>
+{% endif %}
+
+<br><br>
+
+
+{% endblock body %}
+
+{% block script %}
+
+<script>
+
+    $(document).ready(function () {
+        $("#quiz-div").hide();
+        $(".btn.btn-light.mb-2").click(function () {
+            $("#quiz-div").hide();
+            $("#lession-div").show();
+            var src = $(this).attr("data-src");
+            var name = $(this).attr("data-title");
+            var description = $(this).attr("data-description");
+            $('video source').attr('src', src);
+            $("video")[0].load();
+            $("video")[0].play();
+            $("#lessionDesc").html(description);
+            $("#lessionName").html(name);
+        });
+
+        $(".btn.btn-light.mb-3").click(function () {
+            $("video")[0].pause();
+            $("#lession-div").hide();
+            $("#quiz-div").show();
+        });
+    });
+
+</script>
+
+{% endblock script %}

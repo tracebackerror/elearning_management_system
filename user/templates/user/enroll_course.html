@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>{{course_obj.name}}</title>{% endblock title %}
+
+
+{% block body %}
+
+<br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img width="100%" height="200px" src="{{course_obj.thumbnail.url}}">
+        </div>
+        <div class="col-md-8">
+            <p style="font-weight:bold;font-size: larger;">Course Name : {{course_obj.name}}</p>
+            <p>Description: {{course_obj.description}}</p>
+            <p style="margin-bottom: 2px;">Author: {{course_obj.author}}</p>
+            <p style="margin-bottom: 2px;">Duration: {{course_obj.duration}}</p>
+            <p style="margin-bottom: 2px;">Total Enrolled: {{course_obj.enrolled_count}}</p>
+            <p style="margin-bottom: 2px;font-style: italic">Last updated: {{course_obj.updated_at}}</p>
+            <br>
+                {% if enrolled %}
+                     <a href="{% url 'course' slug=course_obj.slug %}"  style="float: right;width:20%" class="btn btn-success">Go To Course</a>
+                {% else %}
+                    <form method="post">
+                    {% csrf_token %}
+                        <input type="hidden" name="course_id" value="{{course_obj.id}}">
+                        <button style="float: right;width:20%" class="btn btn-outline-success">Enroll</button>
+                    </form>
+                {% endif %}
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+{% if lesson_obj %}
+<div class="container">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th>Sr No.</th>
+                <th>Lesson Name</th>
+                <th>Lesson Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson in lesson_obj %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{lesson.name}}</td>
+                <td>{{lesson.duration}}</td>
+            </tr>
+            {% endfor %}
+            {% if quiz_obj %}
+            <tr>
+                <td>---</td>
+                <td>Quiz (Total {{quiz_obj|length}} Questions)</td>
+                <td>---</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<h4 style="text-align:center;color:orange">Not any lesson added on the course</h4>
+{% endif %}
+
+<br><br>
+
+{% endblock body %}

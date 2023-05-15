@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    {% block title %}{% endblock title %}
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"> </script>
+    {% block header %}{% endblock header %}
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <img src="{% static 'images/logo2.png' %}" width="150px" height="125px">
+        </div>
+        <div class="col-md-6" style="display: block;margin-bottom: auto;margin-top: auto;">
+            <h2 style="letter-spacing: 10px;color:green;font-weight: bold;">E-Learning Portal</h2>
+        </div>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+  <a class="navbar-brand" href="{% url 'home' %}">E-Learning</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% if request.user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'my_course' %}">My Course</a>
+      </li>
+      {% endif %}
+    </ul>
+  {% if request.user.is_authenticated %}
+    <div class="text-end">
+        <a role="button" href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+    </div>
+  {% else %}
+    <div class="text-end">
+        <a role="button" href="{% url 'login' %}" class="btn btn-outline-light me-5">Login</a>
+        <a role="button" href="{% url 'sign_up' %}" class="btn btn-primary">Sign-up</a>
+    </div>
+  {% endif %}
+  </div>
+  </div>
+
+</nav>
+
+{% block body %}{% endblock body %}
+
+
+{% block script %}{% endblock script %}
+
+</body>
+</html>

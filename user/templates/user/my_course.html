@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>My Course</title>{% endblock title %}
+
+
+{% block body %}
+
+<br><br>
+
+{% if course_obj %}
+<div class="container">
+    <h3>My Course</h3>
+    <hr>
+    <div class="row">
+        {% for course in course_obj %}
+        <div class="col-lg-3" style="margin-bottom: 10px;margin-top: 10px;">
+            <div class="card h-100">
+                <img class="card-img-top" src="{{course.thumbnail.url}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size: medium;">{{course.name|truncatechars:100}}</h5>
+                    <p class="card-text" style="color: grey;font-size: small;">{{course.author|truncatechars:30}}</p>
+                    <a href="{% url 'course' slug=course.slug %}"  style="width:100%" class="btn btn-success">Go To Course</a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h4 style="text-align:center;color:orange">You haven't enrolled any course yet</h4>
+{% endif %}
+
+<br><br>
+
+{% endblock body %}

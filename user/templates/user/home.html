@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Home</title>{% endblock title %}
+
+{% block body %}
+
+<br>
+{% if course_obj %}
+<div class="container">
+    <div class="row">
+        {% for course in course_obj %}
+        <div class="col-lg-3" style="margin-bottom: 10px;margin-top: 10px;">
+            <div class="card h-100">
+                <img class="card-img-top" src="{{course.thumbnail.url}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size: medium;">{{course.name|truncatechars:100}}</h5>
+                    <p class="card-text" style="color: grey;font-size: small;">{{course.author|truncatechars:30}}</p>
+                    {% if request.user and course.id in user_enrolled_course_list %}
+                    <a href="{% url 'enroll_course' slug=course.slug %}" style="float: right;width:100%" class="btn btn-success">Enrolled</a>
+                    {% else %}
+                    <a href="{% url 'enroll_course' slug=course.slug %}" style="float: right;width:100%" class="btn btn-outline-success">Enroll {{course.enrolled_count}}+</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h4 style="text-align:center;color:orange">No course available yet</h4>
+{% endif %}
+
+
+
+
+
+{% endblock body %}
