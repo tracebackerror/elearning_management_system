@@ -1,4 +1,4 @@
-# eLearning Web Portal
+# E-learning Management System
 
 ## How to Run
 

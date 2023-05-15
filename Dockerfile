@@ -7,7 +7,7 @@ WORKDIR /project
 RUN apt-get update && apt-get install -y git
 
 # Clone the repository
-RUN git clone https://github.com/tracebackerror/elearning_management_system .
+RUN git clone https://github.com/tracebackerror/elearning_management_system /project
 
 # Install project dependencies and migrations
 RUN pip install -r requirements.txt
